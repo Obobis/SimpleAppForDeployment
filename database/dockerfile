@@ -1,0 +1,18 @@
+FROM postgres:15-alpine
+
+# Создаем директорию для логов и настраиваем права
+RUN mkdir -p /var/log/postgresql \
+  && chown postgres:postgres /var/log/postgresql \
+  && chmod 700 /var/log/postgresql
+
+# Копируем скрипт и конфиги
+COPY ./init.sql /docker-entrypoint-initdb.d/
+COPY ./postgresql.conf /etc/postgresql/postgresql.conf
+COPY ./pg_hba.conf /etc/postgresql/pg_hba.conf
+
+# Обеспечиваем права
+RUN chmod 600 /etc/postgresql/*.conf \
+  && chown postgres:postgres /etc/postgresql/*.conf
+
+# Запуск с указанием пути к конфигу
+CMD ["postgres", "-c", "config_file=/etc/postgresql/postgresql.conf"]

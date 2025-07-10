@@ -1,0 +1,20 @@
+{
+  "name": "frontend",
+  "version": "1.0.0",
+  "description": "This template should help get you started developing with Svelte in Vite.",
+  "main": "svelte.config.js",
+  "scripts": {
+    "build": "vite build",
+    "dev": "vite",
+    "preview": "vite preview"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "type": "module",
+  "dependencies": {
+    "@sveltejs/vite-plugin-svelte": "^2.4.5",
+    "svelte": "^4.2.7",
+    "vite": "^4.5.0"
+  }
+}
