@@ -1,0 +1,53 @@
+name: ci
+on: 
+  push:
+    branches:
+      - master 
+  pull_request:
+    branches:
+      - master
+
+jobs:
+  run_tests:
+
+    defaults:
+      run: 
+        working-directory: ./backend
+
+    runs-on: ubuntu
+
+    container: 
+      image: golang:1.24
+    
+    steps:
+
+      #code-checkout
+      - name: checkout 
+        uses: actions/checkout@master
+
+      - name: dependency-installation
+        run:
+          go mod download
+      
+      - name: running tests 
+        run:
+          go test -coverprofile=coverage.out -covermode=atomic ./...
+
+      - name: Generate HTML coverage report
+        run: go tool cover -html=coverage.out -o coverage.html
+      
+
+      - name: Install Node.js 20
+        run: |
+          apt-get update
+          apt-get install -y curl gnupg ca-certificates
+          curl -fsSL https://deb.nodesource.com/setup_20.x | bash -
+          apt-get install -y nodejs
+          node -v
+          npm -v
+
+      - name: Upload HTML report as artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: coverage-report
+          path: coverage.html
